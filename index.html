@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Switch Map</title>
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Switch Map">
+<meta name="theme-color" content="#11161c">
+<link rel="manifest" href="manifest.json">
+<style>
+  :root{
+    --bg: #11161c;
+    --panel: #161d26;
+    --line: #2a3340;
+    --text: #e7ecf1;
+    --muted: #7d8ba0;
+    --amber: #ffb454;   /* 12-way */
+    --cyan: #5fd0e0;    /* 8-way */
+    --accent: #ff6a3d;  /* selection */
+    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+    --sans: 'Inter', -apple-system, sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:20px;
+    background:var(--bg); color:var(--text);
+    font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;
+  }
+  h1{
+    font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em;
+    margin:0 0 2px 0; text-transform:uppercase; color:var(--text);
+  }
+  .sub{ color:var(--muted); font-size:0.8rem; margin-bottom:18px; }
+
+  .panel{
+    background:var(--panel); border:1px solid var(--line);
+    border-radius:10px; padding:14px; margin-bottom:14px;
+  }
+  .panel h2{
+    font-family:var(--mono); font-size:0.7rem; letter-spacing:.12em;
+    text-transform:uppercase; color:var(--muted); margin:0 0 12px 0;
+  }
+
+  /* Tabs */
+  .tabs{ display:flex; gap:6px; margin-bottom:14px; }
+  .tab{
+    flex:1; text-align:center; padding:10px; border-radius:8px;
+    border:1px solid var(--line); background:var(--panel);
+    font-family:var(--mono); font-size:0.8rem; letter-spacing:.05em;
+    color:var(--muted); cursor:pointer; user-select:none;
+    transition:.15s;
+  }
+  .tab.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
+
+  /* Inputs */
+  label{ display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; font-family:var(--mono); letter-spacing:.04em;}
+  input[type=number], select{
+    width:100%; background:#0d1218; border:1px solid var(--line);
+    color:var(--text); border-radius:6px; padding:10px;
+    font-family:var(--mono); font-size:1rem;
+  }
+  input[type=number]:focus, select:focus{ outline:none; border-color:var(--accent); }
+  .row{ display:flex; gap:10px; }
+  .row > div{ flex:1; }
+
+  /* Result grid */
+  .result-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:14px;
+  }
+  .result-grid .full{ grid-column: 1 / -1; }
+  .kv{
+    background:#0d1218; border:1px solid var(--line); border-radius:8px;
+    padding:10px 12px;
+  }
+  .kv .k{ font-size:0.65rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-family:var(--mono); margin-bottom:4px;}
+  .kv .v{ font-family:var(--mono); font-size:1.15rem; color:var(--text); }
+  .kv .v.accent{ color:var(--accent); }
+  .kv .v.amber{ color:var(--amber); }
+  .kv .v.cyan{ color:var(--cyan); }
+
+  /* Pin diagram */
+  .pins{
+    display:grid; grid-template-columns: repeat(8, 1fr); gap:6px; margin-top:10px;
+  }
+  .pin{
+    aspect-ratio:1; border-radius:6px; display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; border:1px solid var(--line);
+    background:#0d1218; color:var(--muted);
+  }
+  .pin .num{ font-size:0.6rem; color:var(--muted); }
+  .pin .port{ font-size:0.78rem; font-weight:600; }
+  .pin.way12{ border-color:#4a3a20; }
+  .pin.way12.active{ background:#2a200d; border-color:var(--amber); color:var(--amber); }
+  .pin.way8{ border-color:#1f3a40; }
+  .pin.way8.active{ background:#0d2226; border-color:var(--cyan); color:var(--cyan); }
+  .legend{ display:flex; gap:16px; margin-top:10px; font-size:0.7rem; color:var(--muted); font-family:var(--mono);}
+  .legend span{ display:inline-flex; align-items:center; gap:6px;}
+  .swatch{ width:10px; height:10px; border-radius:3px; display:inline-block;}
+  .swatch.amber{ background:var(--amber); }
+  .swatch.cyan{ background:var(--cyan); }
+
+  /* Rack diagram */
+  .rack{ display:flex; flex-direction:column; gap:6px; }
+  .rack-row{ display:flex; align-items:center; gap:6px; }
+  .rack-row .glabel{
+    width:24px; font-family:var(--mono); font-weight:700; color:var(--muted);
+    font-size:0.85rem; text-align:center;
+  }
+  .rack-row .slots{ display:grid; grid-template-columns:repeat(12,1fr); gap:4px; flex:1; }
+  .slot{
+    aspect-ratio:1.4; border-radius:5px; border:1px solid var(--line);
+    background:#0d1218; display:flex; align-items:center; justify-content:center;
+    font-family:var(--mono); font-size:0.7rem; color:var(--muted); cursor:pointer;
+    transition:.1s;
+  }
+  .slot:hover{ border-color:#4a5568; }
+  .slot.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
+
+  .config{ font-size:0.75rem; color:var(--muted); }
+  .config-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--line); }
+  .config-row:last-child{ border-bottom:none; }
+  .config select{ width:80px; padding:6px; font-size:0.85rem; }
+  .note{ font-size:0.72rem; color:var(--muted); margin-top:10px; line-height:1.5; }
+  .note b{ color:var(--text); }
+
+  details summary{ cursor:pointer; font-family:var(--mono); font-size:0.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+  details[open] summary{ margin-bottom:10px; }
+</style>
+</head>
+<body>
+
+<h1>Switch Map</h1>
+<div class="sub">768 ports · 48 slices · 16 ports/slice · 12-way + 8-way ribbon per slice</div>
+
+<div class="tabs">
+  <div class="tab active" data-tab="port">Port → Slice</div>
+  <div class="tab" data-tab="slice">Slice → Ports</div>
+</div>
+
+<!-- PORT LOOKUP -->
+<div class="panel" id="panel-port">
+  <h2>Find slice &amp; ribbon for a port</h2>
+  <label for="portInput">Port number (1–768)</label>
+  <input type="number" id="portInput" min="1" max="768" value="29">
+
+  <div class="result-grid" id="portResults"></div>
+  <div id="portPins"></div>
+  <div class="legend">
+    <span><span class="swatch amber"></span>12-way ribbon (pins 1–12)</span>
+    <span><span class="swatch cyan"></span>8-way ribbon (pins 1–4)</span>
+  </div>
+</div>
+
+<!-- SLICE LOOKUP -->
+<div class="panel" id="panel-slice" style="display:none;">
+  <h2>Find ports &amp; ribbons for a slice</h2>
+  <div class="row">
+    <div>
+      <label for="groupSelect">Group</label>
+      <select id="groupSelect"></select>
+    </div>
+    <div>
+      <label for="numSelect">Number</label>
+      <select id="numSelect"></select>
+    </div>
+  </div>
+
+  <div class="result-grid" id="sliceResults"></div>
+  <div id="slicePins"></div>
+  <div class="legend">
+    <span><span class="swatch amber"></span>12-way ribbon (pins 1–12)</span>
+    <span><span class="swatch cyan"></span>8-way ribbon (pins 1–4)</span>
+  </div>
+</div>
+
+<!-- RACK DIAGRAM -->
+<div class="panel">
+  <h2>Rack layout (top → bottom as viewed on screen)</h2>
+  <div class="rack" id="rack"></div>
+  <div class="note">Tap a slice to load it into the lookups above.</div>
+</div>
+
+<!-- CONFIG -->
+<div class="panel">
+  <details>
+    <summary>Slice numbering &amp; layout (adjust if it doesn't match your unit)</summary>
+    <div class="note" style="margin-top:0;">
+      <b>Port-number order</b> — which group occupies each block of 192 ports:
+    </div>
+    <div class="config" id="configRowsNumbering"></div>
+    <div class="note">
+      Default: ports 1–192 = A, 193–384 = C, 385–576 = B, 577–768 = D
+      (i.e. slices A1–A12, C1–C12, B1–B12, D1–D12).
+    </div>
+    <div class="note" style="margin-top:14px;">
+      <b>Screen layout order</b> — top-to-bottom row order on the rack (visual only):
+    </div>
+    <div class="config" id="configRowsDisplay"></div>
+    <div class="note">
+      Default: D (top), A, C, B (bottom) — this does not affect port numbers, only the diagram below.
+    </div>
+  </details>
+</div>
+
+<script>
+const TOTAL_PORTS = 768;
+const PER_SLICE = 16;
+const NUM_SLICES = 48; // 768/16
+const GROUP_SIZE = 12;
+const ALL_LETTERS = ['A','B','C','D'];
+
+// order of letter-groups across slice-number blocks 1-12,13-24,25-36,37-48
+// i.e. ports 1-192 = block 0, 193-384 = block 1, 385-576 = block 2, 577-768 = block 3
+let numberOrder = ['A','C','B','D'];
+
+// order the groups are drawn top-to-bottom on the rack diagram (purely visual,
+// independent of the numbering order above)
+let displayOrder = ['D','A','C','B'];
+
+function sliceFromPort(port){
+  return Math.floor((port-1)/PER_SLICE) + 1;
+}
+function positionFromPort(port){
+  return ((port-1) % PER_SLICE) + 1;
+}
+function ribbonFromPosition(pos){
+  if(pos <= 12) return {type:'12-way', pin: pos};
+  return {type:'8-way', pin: pos - 12};
+}
+function labelFromSlice(slice){
+  const groupIndex = Math.floor((slice-1)/GROUP_SIZE);
+  const numberInGroup = ((slice-1) % GROUP_SIZE) + 1;
+  return {letter: numberOrder[groupIndex], number: numberInGroup, groupIndex};
+}
+function sliceFromLabel(letter, number){
+  const groupIndex = numberOrder.indexOf(letter);
+  return groupIndex*GROUP_SIZE + Number(number);
+}
+function portRangeFromSlice(slice){
+  const start = (slice-1)*PER_SLICE + 1;
+  return [start, start+PER_SLICE-1];
+}
+
+function renderPinDiagram(container, slice, highlightPort){
+  const [start] = portRangeFromSlice(slice);
+  let html = '<div class="pins">';
+  for(let p=1; p<=16; p++){
+    const port = start + p - 1;
+    const r = ribbonFromPosition(p);
+    const cls = r.type === '12-way' ? 'way12' : 'way8';
+    const active = (port === highlightPort) ? ' active' : '';
+    html += `<div class="pin ${cls}${active}">
+               <div class="num">${r.type==='12-way' ? '12W' : '8W'}·${r.pin}</div>
+               <div class="port">${port}</div>
+             </div>`;
+  }
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+function updatePortPanel(){
+  const port = Math.min(768, Math.max(1, parseInt(document.getElementById('portInput').value || 1)));
+  const slice = sliceFromPort(port);
+  const pos = positionFromPort(port);
+  const ribbon = ribbonFromPosition(pos);
+  const label = labelFromSlice(slice);
+
+  document.getElementById('portResults').innerHTML = `
+    <div class="kv"><div class="k">Slice #</div><div class="v">${slice} / ${NUM_SLICES}</div></div>
+    <div class="kv"><div class="k">Slice label</div><div class="v accent">${label.letter}${label.number}</div></div>
+    <div class="kv"><div class="k">Position in slice</div><div class="v">${pos} / 16</div></div>
+    <div class="kv"><div class="k">Ribbon</div><div class="v ${ribbon.type==='12-way'?'amber':'cyan'}">${ribbon.type}, pin ${ribbon.pin}</div></div>
+  `;
+  renderPinDiagram(document.getElementById('portPins'), slice, port);
+  highlightRackSlice(slice);
+}
+
+function updateSlicePanel(){
+  const letter = document.getElementById('groupSelect').value;
+  const number = document.getElementById('numSelect').value;
+  const slice = sliceFromLabel(letter, number);
+  const [start, end] = portRangeFromSlice(slice);
+
+  document.getElementById('sliceResults').innerHTML = `
+    <div class="kv"><div class="k">Slice #</div><div class="v">${slice} / ${NUM_SLICES}</div></div>
+    <div class="kv"><div class="k">Slice label</div><div class="v accent">${letter}${number}</div></div>
+    <div class="kv full"><div class="k">Port range</div><div class="v">${start} – ${end}</div></div>
+    <div class="kv"><div class="k">12-way ribbon</div><div class="v amber">ports ${start}–${start+11} (pins 1–12)</div></div>
+    <div class="kv"><div class="k">8-way ribbon</div><div class="v cyan">ports ${start+12}–${end} (pins 1–4)</div></div>
+  `;
+  renderPinDiagram(document.getElementById('slicePins'), slice, null);
+  highlightRackSlice(slice);
+}
+
+function buildSelectors(){
+  const groupSelect = document.getElementById('groupSelect');
+  groupSelect.innerHTML = ALL_LETTERS.map(l => `<option value="${l}">${l}</option>`).join('');
+  const numSelect = document.getElementById('numSelect');
+  numSelect.innerHTML = Array.from({length:12}, (_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+}
+
+function buildRack(){
+  const rack = document.getElementById('rack');
+  let html = '';
+  // displayed top-to-bottom using displayOrder, but slice numbers come from
+  // wherever that letter sits in numberOrder
+  displayOrder.forEach((letter) => {
+    const gi = numberOrder.indexOf(letter);
+    html += `<div class="rack-row" data-group="${gi}"><div class="glabel">${letter}</div><div class="slots">`;
+    for(let n=1; n<=12; n++){
+      const slice = gi*GROUP_SIZE + n;
+      html += `<div class="slot" data-slice="${slice}">${letter}${n}</div>`;
+    }
+    html += '</div></div>';
+  });
+  rack.innerHTML = html;
+
+  rack.querySelectorAll('.slot').forEach(el => {
+    el.addEventListener('click', () => {
+      const slice = parseInt(el.dataset.slice);
+      const label = labelFromSlice(slice);
+      // sync slice panel
+      document.getElementById('groupSelect').value = label.letter;
+      document.getElementById('numSelect').value = label.number;
+      // sync port panel to first port of slice
+      const [start] = portRangeFromSlice(slice);
+      document.getElementById('portInput').value = start;
+      switchTab('slice');
+      updateSlicePanel();
+      updatePortPanel();
+    });
+  });
+}
+
+function highlightRackSlice(slice){
+  document.querySelectorAll('.slot').forEach(el => {
+    el.classList.toggle('active', parseInt(el.dataset.slice) === slice);
+  });
+}
+
+function buildConfig(){
+  const numContainer = document.getElementById('configRowsNumbering');
+  const dispContainer = document.getElementById('configRowsDisplay');
+
+  let numHtml = '';
+  for(let b=0; b<4; b++){
+    numHtml += `<div class="config-row">
+      <span>Ports ${b*192+1}–${(b+1)*192} (slices ${b*12+1}–${b*12+12})</span>
+      <select data-block="${b}" class="num-select">
+        ${ALL_LETTERS.map(l => `<option value="${l}" ${numberOrder[b]===l?'selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+  numContainer.innerHTML = numHtml;
+
+  let dispHtml = '';
+  for(let b=0; b<4; b++){
+    dispHtml += `<div class="config-row">
+      <span>Row ${b+1} (top = 1)</span>
+      <select data-row="${b}" class="disp-select">
+        ${ALL_LETTERS.map(l => `<option value="${l}" ${displayOrder[b]===l?'selected':''}>${l}</option>`).join('')}
+      </select>
+    </div>`;
+  }
+  dispContainer.innerHTML = dispHtml;
+
+  numContainer.querySelectorAll('.num-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const b = parseInt(sel.dataset.block);
+      numberOrder[b] = sel.value;
+      buildRack();
+      updatePortPanel();
+      updateSlicePanel();
+    });
+  });
+  dispContainer.querySelectorAll('.disp-select').forEach(sel => {
+    sel.addEventListener('change', () => {
+      const b = parseInt(sel.dataset.row);
+      displayOrder[b] = sel.value;
+      buildRack();
+      updatePortPanel();
+      updateSlicePanel();
+    });
+  });
+}
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
+  document.getElementById('panel-port').style.display = name === 'port' ? '' : 'none';
+  document.getElementById('panel-slice').style.display = name === 'slice' ? '' : 'none';
+}
+
+document.querySelectorAll('.tab').forEach(t => {
+  t.addEventListener('click', () => switchTab(t.dataset.tab));
+});
+
+document.getElementById('portInput').addEventListener('input', updatePortPanel);
+document.getElementById('groupSelect').addEventListener('change', updateSlicePanel);
+document.getElementById('numSelect').addEventListener('change', updateSlicePanel);
+
+// init
+buildSelectors();
+buildRack();
+buildConfig();
+updatePortPanel();
+updateSlicePanel();
+</script>
+</body>
+</html>
