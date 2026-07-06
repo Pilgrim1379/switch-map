@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,148 +11,152 @@
 <meta name="theme-color" content="#11161c">
 <link rel="manifest" href="manifest.json">
 <style>
-  :root{
-    --bg: #11161c;
-    --panel: #161d26;
-    --line: #2a3340;
-    --text: #e7ecf1;
-    --muted: #7d8ba0;
-    --amber: #ffb454;   /* 12-way */
-    --cyan: #5fd0e0;    /* 8-way */
-    --accent: #ff6a3d;  /* selection */
-    --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
-    --sans: 'Inter', -apple-system, sans-serif;
-  }
-  *{box-sizing:border-box;}
-  body{
-    margin:0; padding:20px;
-    background:var(--bg); color:var(--text);
-    font-family:var(--sans);
-    -webkit-font-smoothing:antialiased;
-  }
-  h1{
-    font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em;
-    margin:0 0 2px 0; text-transform:uppercase; color:var(--text);
-  }
-  .sub{ color:var(--muted); font-size:0.8rem; margin-bottom:18px; }
-
-  .panel{
-    background:var(--panel); border:1px solid var(--line);
-    border-radius:10px; padding:14px; margin-bottom:14px;
-  }
-  .panel h2{
-    font-family:var(--mono); font-size:0.7rem; letter-spacing:.12em;
-    text-transform:uppercase; color:var(--muted); margin:0 0 12px 0;
-  }
-
-  /* Tabs */
-  .tabs{ display:flex; gap:6px; margin-bottom:14px; }
-  .tab{
-    flex:1; text-align:center; padding:10px; border-radius:8px;
-    border:1px solid var(--line); background:var(--panel);
-    font-family:var(--mono); font-size:0.8rem; letter-spacing:.05em;
-    color:var(--muted); cursor:pointer; user-select:none;
-    transition:.15s;
-  }
-  .tab.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
-
-  /* Inputs */
-  label{ display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; font-family:var(--mono); letter-spacing:.04em;}
-  input[type=number], select{
-    width:100%; background:#0d1218; border:1px solid var(--line);
-    color:var(--text); border-radius:6px; padding:10px;
-    font-family:var(--mono); font-size:1rem;
-  }
-  input[type=number]:focus, select:focus{ outline:none; border-color:var(--accent); }
-  .row{ display:flex; gap:10px; }
-  .row > div{ flex:1; }
-
-  /* Result grid */
-  .result-grid{
-    display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:14px;
-  }
-  .result-grid .full{ grid-column: 1 / -1; }
-  .kv{
-    background:#0d1218; border:1px solid var(--line); border-radius:8px;
-    padding:10px 12px;
-  }
-  .kv .k{ font-size:0.65rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-family:var(--mono); margin-bottom:4px;}
-  .kv .v{ font-family:var(--mono); font-size:1.15rem; color:var(--text); }
-  .kv .v.accent{ color:var(--accent); }
-  .kv .v.amber{ color:var(--amber); }
-  .kv .v.cyan{ color:var(--cyan); }
-
-  /* Pin diagram */
-  .pins{
-    display:grid; grid-template-columns: repeat(8, 1fr); gap:6px; margin-top:10px;
-  }
-  .pin{
-    aspect-ratio:1; border-radius:6px; display:flex; flex-direction:column;
-    align-items:center; justify-content:center;
-    font-family:var(--mono); font-size:0.7rem; border:1px solid var(--line);
-    background:#0d1218; color:var(--muted);
-  }
-  .pin .num{ font-size:0.6rem; color:var(--muted); }
-  .pin .port{ font-size:0.78rem; font-weight:600; }
-  .pin.way12{ border-color:#4a3a20; }
-  .pin.way12.active{ background:#2a200d; border-color:var(--amber); color:var(--amber); }
-  .pin.way8{ border-color:#1f3a40; }
-  .pin.way8.active{ background:#0d2226; border-color:var(--cyan); color:var(--cyan); }
-  .legend{ display:flex; gap:16px; margin-top:10px; font-size:0.7rem; color:var(--muted); font-family:var(--mono);}
-  .legend span{ display:inline-flex; align-items:center; gap:6px;}
-  .swatch{ width:10px; height:10px; border-radius:3px; display:inline-block;}
-  .swatch.amber{ background:var(--amber); }
-  .swatch.cyan{ background:var(--cyan); }
-
-  /* Rack diagram */
-  .rack{ display:flex; flex-direction:column; gap:6px; }
-  .rack-row{ display:flex; align-items:center; gap:6px; }
-  .rack-row .glabel{
-    width:24px; font-family:var(--mono); font-weight:700; color:var(--muted);
-    font-size:0.85rem; text-align:center;
-  }
-  .rack-row .slots{ display:grid; grid-template-columns:repeat(12,1fr); gap:4px; flex:1; }
-  .slot{
-    aspect-ratio:1.4; border-radius:5px; border:1px solid var(--line);
-    background:#0d1218; display:flex; align-items:center; justify-content:center;
-    font-family:var(--mono); font-size:0.7rem; color:var(--muted); cursor:pointer;
-    transition:.1s;
-  }
-  .slot:hover{ border-color:#4a5568; }
-  .slot.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
-
-  .config{ font-size:0.75rem; color:var(--muted); }
-  .config-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--line); }
-  .config-row:last-child{ border-bottom:none; }
-  .config select{ width:80px; padding:6px; font-size:0.85rem; }
-  .note{ font-size:0.72rem; color:var(--muted); margin-top:10px; line-height:1.5; }
-  .note b{ color:var(--text); }
-
-  details summary{ cursor:pointer; font-family:var(--mono); font-size:0.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-  details[open] summary{ margin-bottom:10px; }
+:root{
+  --bg: #11161c;
+  --panel: #161d26;
+  --line: #2a3340;
+  --text: #e7ecf1;
+  --muted: #7d8ba0;
+  --amber: #ffb454; /* 12-way */
+  --cyan: #5fd0e0;  /* 8-way */
+  --accent: #ff6a3d; /* selection */
+  --green: #6fd67a;  /* SCPI/patch conversion accent */
+  --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
+  --sans: 'Inter', -apple-system, sans-serif;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; padding:20px;
+  background:var(--bg); color:var(--text);
+  font-family:var(--sans);
+  -webkit-font-smoothing:antialiased;
+}
+h1{
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em;
+  margin:0 0 2px 0; text-transform:uppercase; color:var(--text);
+}
+.sub{ color:var(--muted); font-size:0.8rem; margin-bottom:18px; }
+.panel{
+  background:var(--panel); border:1px solid var(--line);
+  border-radius:10px; padding:14px; margin-bottom:14px;
+}
+.panel h2{
+  font-family:var(--mono); font-size:0.7rem; letter-spacing:.12em;
+  text-transform:uppercase; color:var(--muted); margin:0 0 12px 0;
+}
+/* Tabs */
+.tabs{ display:flex; gap:6px; margin-bottom:14px; }
+.tab{
+  flex:1; text-align:center; padding:10px; border-radius:8px;
+  border:1px solid var(--line); background:var(--panel);
+  font-family:var(--mono); font-size:0.8rem; letter-spacing:.05em;
+  color:var(--muted); cursor:pointer; user-select:none;
+  transition:.15s;
+}
+.tab.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
+/* Inputs */
+label{ display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; font-family:var(--mono); letter-spacing:.04em;}
+input[type=number], select{
+  width:100%; background:#0d1218; border:1px solid var(--line);
+  color:var(--text); border-radius:6px; padding:10px;
+  font-family:var(--mono); font-size:1rem;
+}
+input[type=number]:focus, select:focus{ outline:none; border-color:var(--accent); }
+.row{ display:flex; gap:10px; }
+.row > div{ flex:1; }
+/* Result grid */
+.result-grid{
+  display:grid; grid-template-columns: 1fr 1fr; gap:8px; margin-top:14px;
+}
+.result-grid .full{ grid-column: 1 / -1; }
+.kv{
+  background:#0d1218; border:1px solid var(--line); border-radius:8px;
+  padding:10px 12px;
+}
+.kv .k{ font-size:0.65rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-family:var(--mono); margin-bottom:4px;}
+.kv .v{ font-family:var(--mono); font-size:1.15rem; color:var(--text); }
+.kv .v.accent{ color:var(--accent); }
+.kv .v.amber{ color:var(--amber); }
+.kv .v.cyan{ color:var(--cyan); }
+.kv .v.green{ color:var(--green); }
+/* Pin diagram */
+.pins{
+  display:grid; grid-template-columns: repeat(8, 1fr); gap:6px; margin-top:10px;
+}
+.pin{
+  aspect-ratio:1; border-radius:6px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:0.7rem; border:1px solid var(--line);
+  background:#0d1218; color:var(--muted);
+}
+.pin .num{ font-size:0.6rem; color:var(--muted); }
+.pin .port{ font-size:0.78rem; font-weight:600; }
+.pin.way12{ border-color:#4a3a20; }
+.pin.way12.active{ background:#2a200d; border-color:var(--amber); color:var(--amber); }
+.pin.way8{ border-color:#1f3a40; }
+.pin.way8.active{ background:#0d2226; border-color:var(--cyan); color:var(--cyan); }
+.legend{ display:flex; gap:16px; margin-top:10px; font-size:0.7rem; color:var(--muted); font-family:var(--mono);}
+.legend span{ display:inline-flex; align-items:center; gap:6px;}
+.swatch{ width:10px; height:10px; border-radius:3px; display:inline-block;}
+.swatch.amber{ background:var(--amber); }
+.swatch.cyan{ background:var(--cyan); }
+.swatch.green{ background:var(--green); }
+/* Rack diagram */
+.rack{ display:flex; flex-direction:column; gap:6px; }
+.rack-row{ display:flex; align-items:center; gap:6px; }
+.rack-row .glabel{
+  width:24px; font-family:var(--mono); font-weight:700; color:var(--muted);
+  font-size:0.85rem; text-align:center;
+}
+.rack-row .slots{ display:grid; grid-template-columns:repeat(12,1fr); gap:4px; flex:1; }
+.slot{
+  aspect-ratio:1.4; border-radius:5px; border:1px solid var(--line);
+  background:#0d1218; display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:0.7rem; color:var(--muted); cursor:pointer;
+  transition:.1s;
+}
+.slot:hover{ border-color:#4a5568; }
+.slot.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
+.config{ font-size:0.75rem; color:var(--muted); }
+.config-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--line); }
+.config-row:last-child{ border-bottom:none; }
+.config select{ width:80px; padding:6px; font-size:0.85rem; }
+.note{ font-size:0.72rem; color:var(--muted); margin-top:10px; line-height:1.5; }
+.note b{ color:var(--text); }
+details summary{ cursor:pointer; font-family:var(--mono); font-size:0.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
+details[open] summary{ margin-bottom:10px; }
+/* Patch/SCPI panel specifics */
+.seg{ display:flex; gap:6px; margin-bottom:10px; }
+.seg-btn{
+  flex:1; text-align:center; padding:8px; border-radius:6px;
+  border:1px solid var(--line); background:#0d1218;
+  font-family:var(--mono); font-size:0.75rem; color:var(--muted);
+  cursor:pointer; user-select:none; transition:.15s;
+}
+.seg-btn.active{ border-color:var(--green); color:var(--green); background:#0e2016; }
+.arrow{ text-align:center; color:var(--muted); font-family:var(--mono); font-size:1rem; margin:8px 0; }
 </style>
 </head>
 <body>
-
 <h1>Switch Map</h1>
 <div class="sub">768 ports · 48 slices · 16 ports/slice · 12-way + 8-way ribbon per slice</div>
 
 <div class="tabs">
-  <div class="tab active" data-tab="port">Port → Slice</div>
-  <div class="tab" data-tab="slice">Slice → Ports</div>
+  <div class="tab active" data-tab="port">Port &rarr; Slice</div>
+  <div class="tab" data-tab="slice">Slice &rarr; Ports</div>
+  <div class="tab" data-tab="patch">Patch &harr; SCPI</div>
 </div>
 
 <!-- PORT LOOKUP -->
 <div class="panel" id="panel-port">
   <h2>Find slice &amp; ribbon for a port</h2>
-  <label for="portInput">Port number (1–768)</label>
+  <label for="portInput">Port number (1&ndash;768)</label>
   <input type="number" id="portInput" min="1" max="768" value="29">
-
   <div class="result-grid" id="portResults"></div>
   <div id="portPins"></div>
   <div class="legend">
-    <span><span class="swatch amber"></span>12-way ribbon (pins 1–12)</span>
-    <span><span class="swatch cyan"></span>8-way ribbon (pins 1–4)</span>
+    <span><span class="swatch amber"></span>12-way ribbon (pins 1&ndash;12)</span>
+    <span><span class="swatch cyan"></span>8-way ribbon (pins 1&ndash;4)</span>
   </div>
 </div>
 
@@ -168,18 +173,63 @@
       <select id="numSelect"></select>
     </div>
   </div>
-
   <div class="result-grid" id="sliceResults"></div>
   <div id="slicePins"></div>
   <div class="legend">
-    <span><span class="swatch amber"></span>12-way ribbon (pins 1–12)</span>
-    <span><span class="swatch cyan"></span>8-way ribbon (pins 1–4)</span>
+    <span><span class="swatch amber"></span>12-way ribbon (pins 1&ndash;12)</span>
+    <span><span class="swatch cyan"></span>8-way ribbon (pins 1&ndash;4)</span>
+  </div>
+</div>
+
+<!-- PATCH <-> SCPI CONVERSION -->
+<div class="panel" id="panel-patch" style="display:none;">
+  <h2>Patch chord label &harr; SCPI port number</h2>
+  <div class="note" style="margin-top:0; margin-bottom:12px;">
+    Patch chords are labelled 1&ndash;384 for input and 1&ndash;384 for output.
+    SCPI expects 1&ndash;384 for input and 385&ndash;768 for output. Use either
+    direction below &mdash; both stay in sync.
+  </div>
+
+  <!-- Patch -> SCPI -->
+  <label>Patch chord port</label>
+  <div class="row">
+    <div style="flex:1.4;">
+      <input type="number" id="patchInput" min="1" max="384" value="333">
+    </div>
+    <div style="flex:1;">
+      <select id="patchSide">
+        <option value="input">Input side</option>
+        <option value="output">Output side</option>
+      </select>
+    </div>
+  </div>
+  <div class="arrow">&darr; converts to &darr;</div>
+  <div class="result-grid">
+    <div class="kv full"><div class="k">SCPI port</div><div class="v green" id="patchToScpiResult">&mdash;</div></div>
+  </div>
+
+  <div class="note" style="margin:16px 0 6px 0; border-top:1px solid var(--line); padding-top:12px;">
+    <b>Reverse lookup</b>
+  </div>
+
+  <!-- SCPI -> Patch -->
+  <label for="scpiInput">SCPI port (1&ndash;768)</label>
+  <input type="number" id="scpiInput" min="1" max="768" value="717">
+  <div class="arrow">&darr; converts to &darr;</div>
+  <div class="result-grid">
+    <div class="kv"><div class="k">Patch chord port</div><div class="v green" id="scpiToPatchPort">&mdash;</div></div>
+    <div class="kv"><div class="k">Side</div><div class="v accent" id="scpiToPatchSide">&mdash;</div></div>
+  </div>
+
+  <div class="note">
+    Formula: <b>SCPI output = patch chord + 384</b> &nbsp;/&nbsp;
+    <b>patch chord = SCPI output &minus; 384</b>. Input side ports are unchanged (1&ndash;384 &harr; 1&ndash;384).
   </div>
 </div>
 
 <!-- RACK DIAGRAM -->
 <div class="panel">
-  <h2>Rack layout (top → bottom as viewed on screen)</h2>
+  <h2>Rack layout (top &rarr; bottom as viewed on screen)</h2>
   <div class="rack" id="rack"></div>
   <div class="note">Tap a slice to load it into the lookups above.</div>
 </div>
@@ -189,19 +239,19 @@
   <details>
     <summary>Slice numbering &amp; layout (adjust if it doesn't match your unit)</summary>
     <div class="note" style="margin-top:0;">
-      <b>Port-number order</b> — which group occupies each block of 192 ports:
+      <b>Port-number order</b> &mdash; which group occupies each block of 192 ports:
     </div>
     <div class="config" id="configRowsNumbering"></div>
     <div class="note">
-      Default: ports 1–192 = A, 193–384 = C, 385–576 = B, 577–768 = D
-      (i.e. slices A1–A12, C1–C12, B1–B12, D1–D12).
+      Default: ports 1&ndash;192 = A, 193&ndash;384 = C, 385&ndash;576 = B, 577&ndash;768 = D
+      (i.e. slices A1&ndash;A12, C1&ndash;C12, B1&ndash;B12, D1&ndash;D12).
     </div>
     <div class="note" style="margin-top:14px;">
-      <b>Screen layout order</b> — top-to-bottom row order on the rack (visual only):
+      <b>Screen layout order</b> &mdash; top-to-bottom row order on the rack (visual only):
     </div>
     <div class="config" id="configRowsDisplay"></div>
     <div class="note">
-      Default: D (top), A, C, B (bottom) — this does not affect port numbers, only the diagram below.
+      Default: D (top), A, C, B (bottom) &mdash; this does not affect port numbers, only the diagram below.
     </div>
   </details>
 </div>
@@ -212,6 +262,9 @@ const PER_SLICE = 16;
 const NUM_SLICES = 48; // 768/16
 const GROUP_SIZE = 12;
 const ALL_LETTERS = ['A','B','C','D'];
+
+// Patch <-> SCPI mapping
+const PATCH_MAX = 384; // 1-384 on each patch chord panel (input and output)
 
 // order of letter-groups across slice-number blocks 1-12,13-24,25-36,37-48
 // i.e. ports 1-192 = block 0, 193-384 = block 1, 385-576 = block 2, 577-768 = block 3
@@ -245,6 +298,23 @@ function portRangeFromSlice(slice){
   return [start, start+PER_SLICE-1];
 }
 
+// --- Patch chord <-> SCPI conversion ---
+// Patch chords: labelled 1-384 on both the input panel and the output panel.
+// SCPI:         1-384 = input ports, 385-768 = output ports.
+function patchToScpi(patchPort, side){
+  if(side === 'output') return patchPort + PATCH_MAX;
+  return patchPort; // input side: no offset
+}
+function scpiToPatch(scpiPort){
+  if(scpiPort >= 1 && scpiPort <= PATCH_MAX){
+    return {patchPort: scpiPort, side: 'input'};
+  }
+  if(scpiPort > PATCH_MAX && scpiPort <= TOTAL_PORTS){
+    return {patchPort: scpiPort - PATCH_MAX, side: 'output'};
+  }
+  return null; // out of range
+}
+
 function renderPinDiagram(container, slice, highlightPort){
   const [start] = portRangeFromSlice(slice);
   let html = '<div class="pins">';
@@ -254,9 +324,9 @@ function renderPinDiagram(container, slice, highlightPort){
     const cls = r.type === '12-way' ? 'way12' : 'way8';
     const active = (port === highlightPort) ? ' active' : '';
     html += `<div class="pin ${cls}${active}">
-               <div class="num">${r.type==='12-way' ? '12W' : '8W'}·${r.pin}</div>
-               <div class="port">${port}</div>
-             </div>`;
+      <div class="num">${r.type==='12-way' ? '12W' : '8W'}&middot;${r.pin}</div>
+      <div class="port">${port}</div>
+    </div>`;
   }
   html += '</div>';
   container.innerHTML = html;
@@ -288,12 +358,28 @@ function updateSlicePanel(){
   document.getElementById('sliceResults').innerHTML = `
     <div class="kv"><div class="k">Slice #</div><div class="v">${slice} / ${NUM_SLICES}</div></div>
     <div class="kv"><div class="k">Slice label</div><div class="v accent">${letter}${number}</div></div>
-    <div class="kv full"><div class="k">Port range</div><div class="v">${start} – ${end}</div></div>
-    <div class="kv"><div class="k">12-way ribbon</div><div class="v amber">ports ${start}–${start+11} (pins 1–12)</div></div>
-    <div class="kv"><div class="k">8-way ribbon</div><div class="v cyan">ports ${start+12}–${end} (pins 1–4)</div></div>
+    <div class="kv full"><div class="k">Port range</div><div class="v">${start} &ndash; ${end}</div></div>
+    <div class="kv"><div class="k">12-way ribbon</div><div class="v amber">ports ${start}&ndash;${start+11} (pins 1&ndash;12)</div></div>
+    <div class="kv"><div class="k">8-way ribbon</div><div class="v cyan">ports ${start+12}&ndash;${end} (pins 1&ndash;4)</div></div>
   `;
   renderPinDiagram(document.getElementById('slicePins'), slice, null);
   highlightRackSlice(slice);
+}
+
+function updatePatchPanel(){
+  // Patch -> SCPI
+  const patchPort = Math.min(PATCH_MAX, Math.max(1, parseInt(document.getElementById('patchInput').value || 1)));
+  const side = document.getElementById('patchSide').value;
+  const scpiResult = patchToScpi(patchPort, side);
+  document.getElementById('patchToScpiResult').textContent = scpiResult;
+
+  // SCPI -> Patch
+  const scpiPort = Math.min(TOTAL_PORTS, Math.max(1, parseInt(document.getElementById('scpiInput').value || 1)));
+  const reverse = scpiToPatch(scpiPort);
+  if(reverse){
+    document.getElementById('scpiToPatchPort').textContent = reverse.patchPort;
+    document.getElementById('scpiToPatchSide').textContent = reverse.side === 'input' ? 'Input' : 'Output';
+  }
 }
 
 function buildSelectors(){
@@ -349,7 +435,7 @@ function buildConfig(){
   let numHtml = '';
   for(let b=0; b<4; b++){
     numHtml += `<div class="config-row">
-      <span>Ports ${b*192+1}–${(b+1)*192} (slices ${b*12+1}–${b*12+12})</span>
+      <span>Ports ${b*192+1}&ndash;${(b+1)*192} (slices ${b*12+1}&ndash;${b*12+12})</span>
       <select data-block="${b}" class="num-select">
         ${ALL_LETTERS.map(l => `<option value="${l}" ${numberOrder[b]===l?'selected':''}>${l}</option>`).join('')}
       </select>
@@ -392,6 +478,7 @@ function switchTab(name){
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
   document.getElementById('panel-port').style.display = name === 'port' ? '' : 'none';
   document.getElementById('panel-slice').style.display = name === 'slice' ? '' : 'none';
+  document.getElementById('panel-patch').style.display = name === 'patch' ? '' : 'none';
 }
 
 document.querySelectorAll('.tab').forEach(t => {
@@ -401,6 +488,9 @@ document.querySelectorAll('.tab').forEach(t => {
 document.getElementById('portInput').addEventListener('input', updatePortPanel);
 document.getElementById('groupSelect').addEventListener('change', updateSlicePanel);
 document.getElementById('numSelect').addEventListener('change', updateSlicePanel);
+document.getElementById('patchInput').addEventListener('input', updatePatchPanel);
+document.getElementById('patchSide').addEventListener('change', updatePatchPanel);
+document.getElementById('scpiInput').addEventListener('input', updatePatchPanel);
 
 // init
 buildSelectors();
@@ -408,6 +498,7 @@ buildRack();
 buildConfig();
 updatePortPanel();
 updateSlicePanel();
+updatePatchPanel();
 </script>
 </body>
 </html>
