@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,31 +16,29 @@
   --line: #2a3340;
   --text: #e7ecf1;
   --muted: #7d8ba0;
-  --amber: #ffb454; /* 12-way */
-  --cyan: #5fd0e0;  /* 8-way */
-  --accent: #ff6a3d; /* selection */
-  --green: #6fd67a;  /* SCPI/patch conversion accent */
+  --amber: #ffb454;
+  --cyan: #5fd0e0;
+  --accent: #ff6a3d;
+  --green: #6fd67a;
+  --warn: #ff9500;
   --mono: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
   --sans: 'Inter', -apple-system, sans-serif;
 }
 *{box-sizing:border-box;}
-html{ overflow-x:hidden; }
+html{overflow-x:hidden;}
 body{
   margin:0; padding:20px;
   background:var(--bg); color:var(--text);
   font-family:var(--sans);
   -webkit-font-smoothing:antialiased;
-  overflow-x:hidden;
-  max-width:100vw;
+  overflow-x:hidden; max-width:100vw;
 }
-@media (max-width: 420px){
-  body{ padding:12px; }
-}
+@media(max-width:420px){body{padding:12px;}}
 h1{
   font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em;
-  margin:0 0 2px 0; text-transform:uppercase; color:var(--text);
+  margin:0 0 2px 0; text-transform:uppercase;
 }
-.sub{ color:var(--muted); font-size:0.8rem; margin-bottom:18px; }
+.sub{color:var(--muted); font-size:0.8rem; margin-bottom:18px;}
 .panel{
   background:var(--panel); border:1px solid var(--line);
   border-radius:10px; padding:14px; margin-bottom:14px;
@@ -50,121 +47,113 @@ h1{
   font-family:var(--mono); font-size:0.7rem; letter-spacing:.12em;
   text-transform:uppercase; color:var(--muted); margin:0 0 12px 0;
 }
-/* Tabs */
-.tabs{ display:flex; gap:6px; margin-bottom:14px; }
+.tabs{display:flex; gap:6px; margin-bottom:14px;}
 .tab{
   flex:1; text-align:center; padding:10px; border-radius:8px;
   border:1px solid var(--line); background:var(--panel);
   font-family:var(--mono); font-size:0.8rem; letter-spacing:.05em;
-  color:var(--muted); cursor:pointer; user-select:none;
-  transition:.15s;
+  color:var(--muted); cursor:pointer; user-select:none; transition:.15s;
 }
-.tab.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
-/* Inputs */
-label{ display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; font-family:var(--mono); letter-spacing:.04em;}
+.tab.active{border-color:var(--accent); color:var(--accent); background:#1c1410;}
+label{display:block; font-size:0.75rem; color:var(--muted); margin-bottom:6px; font-family:var(--mono); letter-spacing:.04em;}
 input[type=number], select{
   width:100%; background:#0d1218; border:1px solid var(--line);
   color:var(--text); border-radius:6px; padding:10px;
   font-family:var(--mono); font-size:1rem;
 }
-input[type=number]:focus, select:focus{ outline:none; border-color:var(--accent); }
-.row{ display:flex; gap:10px; min-width:0; }
-.row > div{ flex:1; min-width:0; }
-/* Result grid */
+input[type=number]:focus, select:focus{outline:none; border-color:var(--accent);}
+.row{display:flex; gap:10px; min-width:0;}
+.row > div{flex:1; min-width:0;}
 .result-grid{
-  display:grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap:8px; margin-top:14px;
-  min-width:0;
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+  gap:8px; margin-top:14px; min-width:0;
 }
-.result-grid .full{ grid-column: 1 / -1; }
-.kv{
-  background:#0d1218; border:1px solid var(--line); border-radius:8px;
-  padding:10px 12px;
-}
-.kv .k{ font-size:0.65rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-family:var(--mono); margin-bottom:4px;}
-.kv .v{ font-family:var(--mono); font-size:1.15rem; color:var(--text); }
-.kv .v.accent{ color:var(--accent); }
-.kv .v.amber{ color:var(--amber); }
-.kv .v.cyan{ color:var(--cyan); }
-.kv .v.green{ color:var(--green); }
-/* Pin diagram */
-.pins{
-  display:grid; grid-template-columns: repeat(8, minmax(0,1fr)); gap:6px; margin-top:10px;
-  width:100%; min-width:0;
-}
+.result-grid .full{grid-column:1/-1;}
+.kv{background:#0d1218; border:1px solid var(--line); border-radius:8px; padding:10px 12px;}
+.kv .k{font-size:0.65rem; color:var(--muted); letter-spacing:.1em; text-transform:uppercase; font-family:var(--mono); margin-bottom:4px;}
+.kv .v{font-family:var(--mono); font-size:1.15rem;}
+.kv .v.accent{color:var(--accent);}
+.kv .v.amber{color:var(--amber);}
+.kv .v.cyan{color:var(--cyan);}
+.kv .v.green{color:var(--green);}
+.pins{display:grid; gap:6px; margin-top:10px; width:100%; min-width:0;}
 .pin{
-  aspect-ratio:1; min-width:0; overflow:hidden; border-radius:6px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  font-family:var(--mono); font-size:0.7rem; border:1px solid var(--line);
+  aspect-ratio:1; min-width:0; overflow:hidden; border-radius:6px;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  font-family:var(--mono); border:1px solid var(--line);
   background:#0d1218; color:var(--muted);
 }
-@media (max-width: 380px){
-  .pins{ gap:4px; }
-  .pin{ font-size:0.6rem; }
-  .pin .num{ font-size:0.52rem; }
-}
-.pin .num{ font-size:0.6rem; color:var(--muted); }
-.pin .port{ font-size:0.78rem; font-weight:600; }
-.pin.way12{ border-color:#4a3a20; }
-.pin.way12.active{ background:#2a200d; border-color:var(--amber); color:var(--amber); }
-.pin.way8{ border-color:#1f3a40; }
-.pin.way8.active{ background:#0d2226; border-color:var(--cyan); color:var(--cyan); }
-.legend{ display:flex; gap:16px; margin-top:10px; font-size:0.7rem; color:var(--muted); font-family:var(--mono);}
-.legend span{ display:inline-flex; align-items:center; gap:6px;}
-.swatch{ width:10px; height:10px; border-radius:3px; display:inline-block;}
-.swatch.amber{ background:var(--amber); }
-.swatch.cyan{ background:var(--cyan); }
-.swatch.green{ background:var(--green); }
-/* Rack diagram */
-.rack{ display:flex; flex-direction:column; gap:6px; width:100%; min-width:0; }
-.rack-row{ display:flex; align-items:center; gap:4px; width:100%; min-width:0; }
+@media(max-width:380px){.pins{gap:4px;} .pin{font-size:0.6rem;} .pin .num{font-size:0.52rem;}}
+.pin .num{font-size:0.6rem; color:var(--muted);}
+.pin .port{font-size:0.78rem; font-weight:600;}
+.pin.way12{border-color:#4a3a20;}
+.pin.way12.active{background:#2a200d; border-color:var(--amber); color:var(--amber);}
+.pin.way8{border-color:#1f3a40;}
+.pin.way8.active{background:#0d2226; border-color:var(--cyan); color:var(--cyan);}
+.legend{display:flex; gap:16px; margin-top:10px; font-size:0.7rem; color:var(--muted); font-family:var(--mono); flex-wrap:wrap;}
+.legend span{display:inline-flex; align-items:center; gap:6px;}
+.swatch{width:10px; height:10px; border-radius:3px; display:inline-block;}
+.swatch.amber{background:var(--amber);}
+.swatch.cyan{background:var(--cyan);}
+.swatch.green{background:var(--green);}
+.rack{display:flex; flex-direction:column; gap:6px; width:100%; min-width:0;}
+.rack-row{display:flex; align-items:center; gap:4px; width:100%; min-width:0;}
 .rack-row .glabel{
-  flex:0 0 18px; width:18px; font-family:var(--mono); font-weight:700; color:var(--muted);
-  font-size:0.8rem; text-align:center;
+  flex:0 0 18px; width:18px; font-family:var(--mono); font-weight:700;
+  color:var(--muted); font-size:0.8rem; text-align:center;
 }
-.rack-row .slots{
-  display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:3px;
-  flex:1; min-width:0;
-}
+.rack-row .slots{display:grid; gap:3px; flex:1; min-width:0;}
 .slot{
-  aspect-ratio:1.4; min-width:0; overflow:hidden; border-radius:4px; border:1px solid var(--line);
-  background:#0d1218; display:flex; align-items:center; justify-content:center;
-  font-family:var(--mono); font-size:0.68rem; color:var(--muted); cursor:pointer;
-  transition:.1s; padding:0;
+  aspect-ratio:1.4; min-width:0; overflow:hidden; border-radius:4px;
+  border:1px solid var(--line); background:#0d1218;
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:0.68rem; color:var(--muted);
+  cursor:pointer; transition:.1s; padding:0;
 }
-@media (max-width: 420px){
-  .rack-row{ gap:3px; }
-  .rack-row .glabel{ flex-basis:14px; width:14px; font-size:0.7rem; }
-  .rack-row .slots{ gap:2px; }
-  .slot{ font-size:0.56rem; border-radius:3px; }
+@media(max-width:420px){
+  .rack-row{gap:3px;}
+  .rack-row .glabel{flex-basis:14px; width:14px; font-size:0.7rem;}
+  .rack-row .slots{gap:2px;}
+  .slot{font-size:0.56rem; border-radius:3px;}
 }
-@media (max-width: 340px){
-  .slot{ font-size:0.5rem; }
+@media(max-width:340px){.slot{font-size:0.5rem;}}
+.slot:hover{border-color:#4a5568;}
+.slot.active{border-color:var(--accent); color:var(--accent); background:#1c1410;}
+.config{font-size:0.75rem; color:var(--muted);}
+.config-row{
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px; padding:6px 0; border-bottom:1px solid var(--line);
 }
-.slot:hover{ border-color:#4a5568; }
-.slot.active{ border-color:var(--accent); color:var(--accent); background:#1c1410; }
-.config{ font-size:0.75rem; color:var(--muted); }
-.config-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:6px 0; border-bottom:1px solid var(--line); }
-.config-row:last-child{ border-bottom:none; }
-.config select{ width:80px; padding:6px; font-size:0.85rem; }
-.note{ font-size:0.72rem; color:var(--muted); margin-top:10px; line-height:1.5; }
-.note b{ color:var(--text); }
-details summary{ cursor:pointer; font-family:var(--mono); font-size:0.7rem; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); }
-details[open] summary{ margin-bottom:10px; }
-/* Patch/SCPI panel specifics */
-.seg{ display:flex; gap:6px; margin-bottom:10px; }
+.config-row:last-child{border-bottom:none;}
+.config select{width:80px; padding:6px; font-size:0.85rem;}
+.hw-input{
+  width:80px; padding:6px 8px; font-size:0.85rem;
+  background:#0d1218; border:1px solid var(--line);
+  color:var(--text); border-radius:6px; font-family:var(--mono);
+}
+.hw-input:focus{outline:none; border-color:var(--accent);}
+.note{font-size:0.72rem; color:var(--muted); margin-top:10px; line-height:1.5;}
+.note b{color:var(--text);}
+.warn{color:var(--warn); font-size:0.7rem; font-family:var(--mono);}
+details summary{
+  cursor:pointer; font-family:var(--mono); font-size:0.7rem;
+  letter-spacing:.1em; text-transform:uppercase; color:var(--muted);
+}
+details[open] summary{margin-bottom:10px;}
+.seg{display:flex; gap:6px; margin-bottom:10px;}
 .seg-btn{
   flex:1; text-align:center; padding:8px; border-radius:6px;
   border:1px solid var(--line); background:#0d1218;
   font-family:var(--mono); font-size:0.75rem; color:var(--muted);
   cursor:pointer; user-select:none; transition:.15s;
 }
-.seg-btn.active{ border-color:var(--green); color:var(--green); background:#0e2016; }
-.arrow{ text-align:center; color:var(--muted); font-family:var(--mono); font-size:1rem; margin:8px 0; }
+.seg-btn.active{border-color:var(--green); color:var(--green); background:#0e2016;}
+.arrow{text-align:center; color:var(--muted); font-family:var(--mono); font-size:1rem; margin:8px 0;}
 </style>
 </head>
 <body>
 <h1>Switch Map</h1>
-<div class="sub">768 ports · 48 slices · 16 ports/slice · 12-way + 8-way ribbon per slice</div>
+<div class="sub" id="subtitle"></div>
 
 <div class="tabs">
   <div class="tab active" data-tab="port">Port &rarr; Slice</div>
@@ -175,13 +164,13 @@ details[open] summary{ margin-bottom:10px; }
 <!-- PORT LOOKUP -->
 <div class="panel" id="panel-port">
   <h2>Find slice &amp; ribbon for a port</h2>
-  <label for="portInput">Port number (1&ndash;768)</label>
+  <label for="portInput">Port number (1&ndash;<span id="portMaxLabel">768</span>)</label>
   <input type="number" id="portInput" min="1" max="768" value="29">
   <div class="result-grid" id="portResults"></div>
   <div id="portPins"></div>
   <div class="legend">
-    <span><span class="swatch amber"></span>12-way ribbon (pins 1&ndash;12)</span>
-    <span><span class="swatch cyan"></span>8-way ribbon (pins 1&ndash;4)</span>
+    <span><span class="swatch amber"></span><span id="legend12way">12-way ribbon (pins 1&ndash;12)</span></span>
+    <span><span class="swatch cyan"></span><span id="legend8way">8-way ribbon (pins 1&ndash;4)</span></span>
   </div>
 </div>
 
@@ -201,21 +190,16 @@ details[open] summary{ margin-bottom:10px; }
   <div class="result-grid" id="sliceResults"></div>
   <div id="slicePins"></div>
   <div class="legend">
-    <span><span class="swatch amber"></span>12-way ribbon (pins 1&ndash;12)</span>
-    <span><span class="swatch cyan"></span>8-way ribbon (pins 1&ndash;4)</span>
+    <span><span class="swatch amber"></span><span id="sliceLegend12">12-way ribbon</span></span>
+    <span><span class="swatch cyan"></span><span id="sliceLegend8">8-way ribbon</span></span>
   </div>
 </div>
 
-<!-- PATCH <-> SCPI CONVERSION -->
+<!-- PATCH <-> SCPI -->
 <div class="panel" id="panel-patch" style="display:none;">
   <h2>Patch chord label &harr; SCPI port number</h2>
-  <div class="note" style="margin-top:0; margin-bottom:12px;">
-    Patch chords are labelled 1&ndash;384 for input and 1&ndash;384 for output.
-    SCPI expects 1&ndash;384 for input and 385&ndash;768 for output. Use either
-    direction below &mdash; both stay in sync.
-  </div>
+  <div class="note" id="patchNote" style="margin-top:0; margin-bottom:12px;"></div>
 
-  <!-- Patch -> SCPI -->
   <label>Patch chord port</label>
   <div class="row">
     <div style="flex:1.4;">
@@ -236,20 +220,14 @@ details[open] summary{ margin-bottom:10px; }
   <div class="note" style="margin:16px 0 6px 0; border-top:1px solid var(--line); padding-top:12px;">
     <b>Reverse lookup</b>
   </div>
-
-  <!-- SCPI -> Patch -->
-  <label for="scpiInput">SCPI port (1&ndash;768)</label>
+  <label for="scpiInput">SCPI port (1&ndash;<span id="scpiMaxLabel">768</span>)</label>
   <input type="number" id="scpiInput" min="1" max="768" value="717">
   <div class="arrow">&darr; converts to &darr;</div>
   <div class="result-grid">
     <div class="kv"><div class="k">Patch chord port</div><div class="v green" id="scpiToPatchPort">&mdash;</div></div>
     <div class="kv"><div class="k">Side</div><div class="v accent" id="scpiToPatchSide">&mdash;</div></div>
   </div>
-
-  <div class="note">
-    Formula: <b>SCPI output = patch chord + 384</b> &nbsp;/&nbsp;
-    <b>patch chord = SCPI output &minus; 384</b>. Input side ports are unchanged (1&ndash;384 &harr; 1&ndash;384).
-  </div>
+  <div class="note" id="patchFormula"></div>
 </div>
 
 <!-- RACK DIAGRAM -->
@@ -262,94 +240,144 @@ details[open] summary{ margin-bottom:10px; }
 <!-- CONFIG -->
 <div class="panel">
   <details>
-    <summary>Slice numbering &amp; layout (adjust if it doesn't match your unit)</summary>
-    <div class="note" style="margin-top:0;">
-      <b>Port-number order</b> &mdash; which group occupies each block of 192 ports:
-    </div>
+    <summary>Switch configuration &amp; layout</summary>
+
+    <div class="note" style="margin-top:0;"><b>Hardware</b> &mdash; adjust for your switch model</div>
+    <div class="config" id="configHardware"></div>
+    <div id="derivedInfo" class="note"></div>
+
+    <div class="note" style="margin-top:14px;"><b>Port-number order</b> &mdash; which group occupies each block of slices:</div>
     <div class="config" id="configRowsNumbering"></div>
-    <div class="note">
-      Default: ports 1&ndash;192 = A, 193&ndash;384 = C, 385&ndash;576 = B, 577&ndash;768 = D
-      (i.e. slices A1&ndash;A12, C1&ndash;C12, B1&ndash;B12, D1&ndash;D12).
-    </div>
-    <div class="note" style="margin-top:14px;">
-      <b>Screen layout order</b> &mdash; top-to-bottom row order on the rack (visual only):
-    </div>
+
+    <div class="note" style="margin-top:14px;"><b>Screen layout order</b> &mdash; top-to-bottom row order on the rack (visual only):</div>
     <div class="config" id="configRowsDisplay"></div>
-    <div class="note">
-      Default: D (top), A, C, B (bottom) &mdash; this does not affect port numbers, only the diagram below.
-    </div>
+    <div class="note">This does not affect port numbers, only the diagram above.</div>
   </details>
 </div>
 
 <script>
-const TOTAL_PORTS = 768;
-const PER_SLICE = 16;
-const NUM_SLICES = 48; // 768/16
-const GROUP_SIZE = 12;
+// ─── Hardware config (user-adjustable) ─────────────────────────────────────
+let portSideCount = 384;   // ports per side: SCPI input=1..N, output=(N+1)..2N
+let portsPerSlice = 16;    // ports per physical slice
+let way12Count    = 12;    // pins occupied by the 12-way ribbon per slice
+
+// ─── Layout config ──────────────────────────────────────────────────────────
 const ALL_LETTERS = ['A','B','C','D'];
+let numberOrder  = ['A','C','B','D']; // port-number order (block 0..3)
+let displayOrder = ['D','A','C','B']; // top-to-bottom rack display order
 
-// Patch <-> SCPI mapping
-const PATCH_MAX = 384; // 1-384 on each patch chord panel (input and output)
+// ─── Derived constants (recalculated on every hardware change) ──────────────
+let TOTAL_PORTS, PATCH_MAX, NUM_SLICES, GROUP_SIZE, WAY8_COUNT;
 
-// order of letter-groups across slice-number blocks 1-12,13-24,25-36,37-48
-// i.e. ports 1-192 = block 0, 193-384 = block 1, 385-576 = block 2, 577-768 = block 3
-let numberOrder = ['A','C','B','D'];
+function recalcConstants(){
+  TOTAL_PORTS = portSideCount * 2;
+  PATCH_MAX   = portSideCount;
+  NUM_SLICES  = portsPerSlice > 0 ? Math.floor(TOTAL_PORTS / portsPerSlice) : 0;
+  GROUP_SIZE  = Math.max(1, Math.floor(NUM_SLICES / 4));
+  WAY8_COUNT  = Math.max(0, portsPerSlice - way12Count);
+}
 
-// order the groups are drawn top-to-bottom on the rack diagram (purely visual,
-// independent of the numbering order above)
-let displayOrder = ['D','A','C','B'];
-
+// ─── Core formulas ──────────────────────────────────────────────────────────
 function sliceFromPort(port){
-  return Math.floor((port-1)/PER_SLICE) + 1;
+  return Math.floor((port - 1) / portsPerSlice) + 1;
 }
 function positionFromPort(port){
-  return ((port-1) % PER_SLICE) + 1;
+  return ((port - 1) % portsPerSlice) + 1;
 }
 function ribbonFromPosition(pos){
-  if(pos <= 12) return {type:'12-way', pin: pos};
-  return {type:'8-way', pin: pos - 12};
+  if(pos <= way12Count) return {type:'12-way', pin: pos};
+  return {type:'8-way', pin: pos - way12Count};
 }
 function labelFromSlice(slice){
-  const groupIndex = Math.floor((slice-1)/GROUP_SIZE);
-  const numberInGroup = ((slice-1) % GROUP_SIZE) + 1;
-  return {letter: numberOrder[groupIndex], number: numberInGroup, groupIndex};
+  const gi = Math.floor((slice - 1) / GROUP_SIZE);
+  const n  = ((slice - 1) % GROUP_SIZE) + 1;
+  return {letter: numberOrder[Math.min(gi, 3)], number: n, groupIndex: gi};
 }
 function sliceFromLabel(letter, number){
-  const groupIndex = numberOrder.indexOf(letter);
-  return groupIndex*GROUP_SIZE + Number(number);
+  const gi = numberOrder.indexOf(letter);
+  return gi * GROUP_SIZE + Number(number);
 }
 function portRangeFromSlice(slice){
-  const start = (slice-1)*PER_SLICE + 1;
-  return [start, start+PER_SLICE-1];
+  const start = (slice - 1) * portsPerSlice + 1;
+  return [start, start + portsPerSlice - 1];
 }
 
-// --- Patch chord <-> SCPI conversion ---
-// Patch chords: labelled 1-384 on both the input panel and the output panel.
-// SCPI:         1-384 = input ports, 385-768 = output ports.
+// ─── Patch / SCPI formulas ──────────────────────────────────────────────────
 function patchToScpi(patchPort, side){
-  if(side === 'output') return patchPort + PATCH_MAX;
-  return patchPort; // input side: no offset
+  return side === 'output' ? patchPort + PATCH_MAX : patchPort;
 }
 function scpiToPatch(scpiPort){
-  if(scpiPort >= 1 && scpiPort <= PATCH_MAX){
+  if(scpiPort >= 1 && scpiPort <= PATCH_MAX)
     return {patchPort: scpiPort, side: 'input'};
-  }
-  if(scpiPort > PATCH_MAX && scpiPort <= TOTAL_PORTS){
+  if(scpiPort > PATCH_MAX && scpiPort <= TOTAL_PORTS)
     return {patchPort: scpiPort - PATCH_MAX, side: 'output'};
-  }
-  return null; // out of range
+  return null;
 }
 
+// ─── UI refresh helpers ─────────────────────────────────────────────────────
+function updateSubtitle(){
+  document.getElementById('subtitle').textContent =
+    `${TOTAL_PORTS} ports · ${NUM_SLICES} slices · ${portsPerSlice} ports/slice · ${way12Count}-way + ${WAY8_COUNT}-way ribbon per slice`;
+}
+
+function updateDerivedInfo(){
+  const warns = [];
+  if(TOTAL_PORTS % portsPerSlice !== 0)
+    warns.push(`⚠ ${TOTAL_PORTS} ÷ ${portsPerSlice} leaves a remainder — last slice will be partial`);
+  if(NUM_SLICES % 4 !== 0)
+    warns.push(`⚠ ${NUM_SLICES} slices ÷ 4 groups = unequal groups (${GROUP_SIZE} slices each, ${NUM_SLICES - GROUP_SIZE*4} remainder)`);
+  if(way12Count >= portsPerSlice)
+    warns.push(`⚠ 12-way pin count must be less than ports per slice`);
+
+  document.getElementById('derivedInfo').innerHTML =
+    `Total ports: <b>${TOTAL_PORTS}</b> &nbsp;·&nbsp; Slices: <b>${NUM_SLICES}</b> &nbsp;·&nbsp; Per group: <b>${GROUP_SIZE}</b>` +
+    (warns.length ? `<br><span class="warn">${warns.join('<br>')}</span>` : '');
+}
+
+function updateLabels(){
+  // Port panel
+  document.getElementById('portMaxLabel').textContent  = TOTAL_PORTS;
+  document.getElementById('legend12way').textContent   = `12-way ribbon (pins 1\u2013${way12Count})`;
+  document.getElementById('legend8way').textContent    = `8-way ribbon (pins 1\u2013${WAY8_COUNT})`;
+  // Slice panel
+  document.getElementById('sliceLegend12').textContent = `12-way ribbon (${way12Count} ports)`;
+  document.getElementById('sliceLegend8').textContent  = `8-way ribbon (${WAY8_COUNT} ports)`;
+  // Patch panel
+  document.getElementById('patchNote').innerHTML =
+    `Patch chords are labelled 1\u2013<b>${PATCH_MAX}</b> for input and 1\u2013<b>${PATCH_MAX}</b> for output. ` +
+    `SCPI expects 1\u2013<b>${PATCH_MAX}</b> for input and <b>${PATCH_MAX + 1}</b>\u2013<b>${TOTAL_PORTS}</b> for output.`;
+  document.getElementById('scpiMaxLabel').textContent = TOTAL_PORTS;
+  document.getElementById('patchFormula').innerHTML =
+    `Formula: <b>SCPI output = patch + ${PATCH_MAX}</b> &nbsp;/&nbsp; <b>patch = SCPI output \u2212 ${PATCH_MAX}</b>. ` +
+    `Input side: 1\u2013${PATCH_MAX} \u2194 1\u2013${PATCH_MAX} (no offset).`;
+}
+
+function updateInputRanges(){
+  const pi = document.getElementById('portInput');
+  pi.max = TOTAL_PORTS;
+  if(parseInt(pi.value) > TOTAL_PORTS) pi.value = TOTAL_PORTS;
+
+  const pai = document.getElementById('patchInput');
+  pai.max = PATCH_MAX;
+  if(parseInt(pai.value) > PATCH_MAX) pai.value = PATCH_MAX;
+
+  const sci = document.getElementById('scpiInput');
+  sci.max = TOTAL_PORTS;
+  if(parseInt(sci.value) > TOTAL_PORTS) sci.value = TOTAL_PORTS;
+}
+
+// ─── Pin diagram ─────────────────────────────────────────────────────────────
 function renderPinDiagram(container, slice, highlightPort){
   const [start] = portRangeFromSlice(slice);
-  let html = '<div class="pins">';
-  for(let p=1; p<=16; p++){
+  const cols = Math.max(4, Math.min(8, Math.ceil(portsPerSlice / 2)));
+  let html = `<div class="pins" style="grid-template-columns:repeat(${cols},minmax(0,1fr))">`;
+  for(let p = 1; p <= portsPerSlice; p++){
     const port = start + p - 1;
-    const r = ribbonFromPosition(p);
-    const cls = r.type === '12-way' ? 'way12' : 'way8';
-    const active = (port === highlightPort) ? ' active' : '';
-    html += `<div class="pin ${cls}${active}">
-      <div class="num">${r.type==='12-way' ? '12W' : '8W'}&middot;${r.pin}</div>
+    const r    = ribbonFromPosition(p);
+    const cls  = r.type === '12-way' ? 'way12' : 'way8';
+    const act  = port === highlightPort ? ' active' : '';
+    html += `<div class="pin ${cls}${act}">
+      <div class="num">${r.type === '12-way' ? '12W' : '8W'}&middot;${r.pin}</div>
       <div class="port">${port}</div>
     </div>`;
   }
@@ -357,18 +385,21 @@ function renderPinDiagram(container, slice, highlightPort){
   container.innerHTML = html;
 }
 
+// ─── Panel updates ───────────────────────────────────────────────────────────
 function updatePortPanel(){
-  const port = Math.min(768, Math.max(1, parseInt(document.getElementById('portInput').value || 1)));
-  const slice = sliceFromPort(port);
-  const pos = positionFromPort(port);
+  const raw  = parseInt(document.getElementById('portInput').value) || 1;
+  const port = Math.min(TOTAL_PORTS, Math.max(1, raw));
+  const slice  = sliceFromPort(port);
+  const pos    = positionFromPort(port);
   const ribbon = ribbonFromPosition(pos);
-  const label = labelFromSlice(slice);
+  const label  = labelFromSlice(slice);
 
   document.getElementById('portResults').innerHTML = `
     <div class="kv"><div class="k">Slice #</div><div class="v">${slice} / ${NUM_SLICES}</div></div>
     <div class="kv"><div class="k">Slice label</div><div class="v accent">${label.letter}${label.number}</div></div>
-    <div class="kv"><div class="k">Position in slice</div><div class="v">${pos} / 16</div></div>
-    <div class="kv"><div class="k">Ribbon</div><div class="v ${ribbon.type==='12-way'?'amber':'cyan'}">${ribbon.type}, pin ${ribbon.pin}</div></div>
+    <div class="kv"><div class="k">Position in slice</div><div class="v">${pos} / ${portsPerSlice}</div></div>
+    <div class="kv"><div class="k">Ribbon</div>
+      <div class="v ${ribbon.type === '12-way' ? 'amber' : 'cyan'}">${ribbon.type}, pin ${ribbon.pin}</div></div>
   `;
   renderPinDiagram(document.getElementById('portPins'), slice, port);
   highlightRackSlice(slice);
@@ -377,53 +408,60 @@ function updatePortPanel(){
 function updateSlicePanel(){
   const letter = document.getElementById('groupSelect').value;
   const number = document.getElementById('numSelect').value;
-  const slice = sliceFromLabel(letter, number);
+  const slice  = sliceFromLabel(letter, number);
   const [start, end] = portRangeFromSlice(slice);
 
   document.getElementById('sliceResults').innerHTML = `
     <div class="kv"><div class="k">Slice #</div><div class="v">${slice} / ${NUM_SLICES}</div></div>
     <div class="kv"><div class="k">Slice label</div><div class="v accent">${letter}${number}</div></div>
     <div class="kv full"><div class="k">Port range</div><div class="v">${start} &ndash; ${end}</div></div>
-    <div class="kv"><div class="k">12-way ribbon</div><div class="v amber">ports ${start}&ndash;${start+11} (pins 1&ndash;12)</div></div>
-    <div class="kv"><div class="k">8-way ribbon</div><div class="v cyan">ports ${start+12}&ndash;${end} (pins 1&ndash;4)</div></div>
+    <div class="kv"><div class="k">12-way ribbon</div>
+      <div class="v amber">ports ${start}&ndash;${start + way12Count - 1} (pins 1&ndash;${way12Count})</div></div>
+    <div class="kv"><div class="k">8-way ribbon</div>
+      <div class="v cyan">ports ${start + way12Count}&ndash;${end} (pins 1&ndash;${WAY8_COUNT})</div></div>
   `;
   renderPinDiagram(document.getElementById('slicePins'), slice, null);
   highlightRackSlice(slice);
 }
 
 function updatePatchPanel(){
-  // Patch -> SCPI
-  const patchPort = Math.min(PATCH_MAX, Math.max(1, parseInt(document.getElementById('patchInput').value || 1)));
-  const side = document.getElementById('patchSide').value;
-  const scpiResult = patchToScpi(patchPort, side);
-  document.getElementById('patchToScpiResult').textContent = scpiResult;
+  const patchPort = Math.min(PATCH_MAX, Math.max(1, parseInt(document.getElementById('patchInput').value) || 1));
+  const side      = document.getElementById('patchSide').value;
+  document.getElementById('patchToScpiResult').textContent = patchToScpi(patchPort, side);
 
-  // SCPI -> Patch
-  const scpiPort = Math.min(TOTAL_PORTS, Math.max(1, parseInt(document.getElementById('scpiInput').value || 1)));
-  const reverse = scpiToPatch(scpiPort);
-  if(reverse){
-    document.getElementById('scpiToPatchPort').textContent = reverse.patchPort;
-    document.getElementById('scpiToPatchSide').textContent = reverse.side === 'input' ? 'Input' : 'Output';
+  const scpiPort = Math.min(TOTAL_PORTS, Math.max(1, parseInt(document.getElementById('scpiInput').value) || 1));
+  const rev = scpiToPatch(scpiPort);
+  if(rev){
+    document.getElementById('scpiToPatchPort').textContent = rev.patchPort;
+    document.getElementById('scpiToPatchSide').textContent = rev.side === 'input' ? 'Input' : 'Output';
   }
 }
 
+// ─── Selectors ───────────────────────────────────────────────────────────────
 function buildSelectors(){
-  const groupSelect = document.getElementById('groupSelect');
-  groupSelect.innerHTML = ALL_LETTERS.map(l => `<option value="${l}">${l}</option>`).join('');
-  const numSelect = document.getElementById('numSelect');
-  numSelect.innerHTML = Array.from({length:12}, (_,i)=>`<option value="${i+1}">${i+1}</option>`).join('');
+  const gs = document.getElementById('groupSelect');
+  const prevG = gs.value;
+  gs.innerHTML = ALL_LETTERS.map(l => `<option value="${l}">${l}</option>`).join('');
+  if(ALL_LETTERS.includes(prevG)) gs.value = prevG;
+
+  const ns = document.getElementById('numSelect');
+  const prevN = Math.min(parseInt(ns.value) || 1, GROUP_SIZE);
+  ns.innerHTML = Array.from({length: GROUP_SIZE}, (_, i) =>
+    `<option value="${i+1}">${i+1}</option>`).join('');
+  ns.value = prevN;
 }
 
+// ─── Rack diagram ─────────────────────────────────────────────────────────────
 function buildRack(){
   const rack = document.getElementById('rack');
   let html = '';
-  // displayed top-to-bottom using displayOrder, but slice numbers come from
-  // wherever that letter sits in numberOrder
-  displayOrder.forEach((letter) => {
+  displayOrder.forEach(letter => {
     const gi = numberOrder.indexOf(letter);
-    html += `<div class="rack-row" data-group="${gi}"><div class="glabel">${letter}</div><div class="slots">`;
-    for(let n=1; n<=12; n++){
-      const slice = gi*GROUP_SIZE + n;
+    html += `<div class="rack-row">
+      <div class="glabel">${letter}</div>
+      <div class="slots" style="grid-template-columns:repeat(${GROUP_SIZE},minmax(0,1fr))">`;
+    for(let n = 1; n <= GROUP_SIZE; n++){
+      const slice = gi * GROUP_SIZE + n;
       html += `<div class="slot" data-slice="${slice}">${letter}${n}</div>`;
     }
     html += '</div></div>';
@@ -434,10 +472,8 @@ function buildRack(){
     el.addEventListener('click', () => {
       const slice = parseInt(el.dataset.slice);
       const label = labelFromSlice(slice);
-      // sync slice panel
       document.getElementById('groupSelect').value = label.letter;
-      document.getElementById('numSelect').value = label.number;
-      // sync port panel to first port of slice
+      document.getElementById('numSelect').value   = label.number;
       const [start] = portRangeFromSlice(slice);
       document.getElementById('portInput').value = start;
       switchTab('slice');
@@ -453,63 +489,105 @@ function highlightRackSlice(slice){
   });
 }
 
+// ─── Config panels ────────────────────────────────────────────────────────────
 function buildConfig(){
-  const numContainer = document.getElementById('configRowsNumbering');
-  const dispContainer = document.getElementById('configRowsDisplay');
-
-  let numHtml = '';
-  for(let b=0; b<4; b++){
-    numHtml += `<div class="config-row">
-      <span>Ports ${b*192+1}&ndash;${(b+1)*192} (slices ${b*12+1}&ndash;${b*12+12})</span>
+  // Numbering order
+  const nc = document.getElementById('configRowsNumbering');
+  let nh = '';
+  for(let b = 0; b < 4; b++){
+    const ps = b * GROUP_SIZE * portsPerSlice + 1;
+    const pe = (b + 1) * GROUP_SIZE * portsPerSlice;
+    nh += `<div class="config-row">
+      <span>Ports ${ps}&ndash;${pe}</span>
       <select data-block="${b}" class="num-select">
-        ${ALL_LETTERS.map(l => `<option value="${l}" ${numberOrder[b]===l?'selected':''}>${l}</option>`).join('')}
-      </select>
-    </div>`;
+        ${ALL_LETTERS.map(l => `<option value="${l}"${numberOrder[b]===l?' selected':''}>${l}</option>`).join('')}
+      </select></div>`;
   }
-  numContainer.innerHTML = numHtml;
-
-  let dispHtml = '';
-  for(let b=0; b<4; b++){
-    dispHtml += `<div class="config-row">
-      <span>Row ${b+1} (top = 1)</span>
-      <select data-row="${b}" class="disp-select">
-        ${ALL_LETTERS.map(l => `<option value="${l}" ${displayOrder[b]===l?'selected':''}>${l}</option>`).join('')}
-      </select>
-    </div>`;
-  }
-  dispContainer.innerHTML = dispHtml;
-
-  numContainer.querySelectorAll('.num-select').forEach(sel => {
+  nc.innerHTML = nh;
+  nc.querySelectorAll('.num-select').forEach(sel => {
     sel.addEventListener('change', () => {
-      const b = parseInt(sel.dataset.block);
-      numberOrder[b] = sel.value;
-      buildRack();
-      updatePortPanel();
-      updateSlicePanel();
+      numberOrder[parseInt(sel.dataset.block)] = sel.value;
+      buildRack(); updatePortPanel(); updateSlicePanel();
     });
   });
-  dispContainer.querySelectorAll('.disp-select').forEach(sel => {
+
+  // Display order
+  const dc = document.getElementById('configRowsDisplay');
+  let dh = '';
+  for(let b = 0; b < 4; b++){
+    dh += `<div class="config-row">
+      <span>Row ${b+1} (top = 1)</span>
+      <select data-row="${b}" class="disp-select">
+        ${ALL_LETTERS.map(l => `<option value="${l}"${displayOrder[b]===l?' selected':''}>${l}</option>`).join('')}
+      </select></div>`;
+  }
+  dc.innerHTML = dh;
+  dc.querySelectorAll('.disp-select').forEach(sel => {
     sel.addEventListener('change', () => {
-      const b = parseInt(sel.dataset.row);
-      displayOrder[b] = sel.value;
-      buildRack();
-      updatePortPanel();
-      updateSlicePanel();
+      displayOrder[parseInt(sel.dataset.row)] = sel.value;
+      buildRack(); updatePortPanel(); updateSlicePanel();
     });
   });
 }
 
+function buildHardwareConfig(){
+  document.getElementById('configHardware').innerHTML = `
+    <div class="config-row">
+      <span>Ports per side</span>
+      <input type="number" id="cfgN" class="hw-input" min="1" max="9999" value="${portSideCount}"
+             title="N in an N×N switch. SCPI input=1..N, output=(N+1)..2N.">
+    </div>
+    <div class="config-row">
+      <span>Ports per slice</span>
+      <input type="number" id="cfgSlice" class="hw-input" min="1" max="256" value="${portsPerSlice}">
+    </div>
+    <div class="config-row">
+      <span>12-way ribbon pins</span>
+      <input type="number" id="cfg12way" class="hw-input" min="1" max="255" value="${way12Count}"
+             title="Remaining ports in the slice go to the 8-way ribbon.">
+    </div>`;
+
+  document.getElementById('cfgN').addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    if(v > 0){ portSideCount = v; applyHardwareConfig(); }
+  });
+  document.getElementById('cfgSlice').addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    if(v > 0){ portsPerSlice = v; applyHardwareConfig(); }
+  });
+  document.getElementById('cfg12way').addEventListener('input', e => {
+    const v = parseInt(e.target.value);
+    if(v > 0 && v < portsPerSlice){ way12Count = v; applyHardwareConfig(); }
+  });
+}
+
+// ─── Apply all hardware changes ───────────────────────────────────────────────
+function applyHardwareConfig(){
+  recalcConstants();
+  updateSubtitle();
+  updateDerivedInfo();
+  updateLabels();
+  updateInputRanges();
+  buildSelectors();
+  buildRack();
+  buildConfig();
+  updatePortPanel();
+  updateSlicePanel();
+  updatePatchPanel();
+}
+
+// ─── Tab switching ────────────────────────────────────────────────────────────
 function switchTab(name){
-  document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === name));
-  document.getElementById('panel-port').style.display = name === 'port' ? '' : 'none';
+  document.querySelectorAll('.tab').forEach(t =>
+    t.classList.toggle('active', t.dataset.tab === name));
+  document.getElementById('panel-port').style.display  = name === 'port'  ? '' : 'none';
   document.getElementById('panel-slice').style.display = name === 'slice' ? '' : 'none';
   document.getElementById('panel-patch').style.display = name === 'patch' ? '' : 'none';
 }
 
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => switchTab(t.dataset.tab));
-});
-
+// ─── Event listeners ──────────────────────────────────────────────────────────
+document.querySelectorAll('.tab').forEach(t =>
+  t.addEventListener('click', () => switchTab(t.dataset.tab)));
 document.getElementById('portInput').addEventListener('input', updatePortPanel);
 document.getElementById('groupSelect').addEventListener('change', updateSlicePanel);
 document.getElementById('numSelect').addEventListener('change', updateSlicePanel);
@@ -517,13 +595,9 @@ document.getElementById('patchInput').addEventListener('input', updatePatchPanel
 document.getElementById('patchSide').addEventListener('change', updatePatchPanel);
 document.getElementById('scpiInput').addEventListener('input', updatePatchPanel);
 
-// init
-buildSelectors();
-buildRack();
-buildConfig();
-updatePortPanel();
-updateSlicePanel();
-updatePatchPanel();
+// ─── Init ─────────────────────────────────────────────────────────────────────
+buildHardwareConfig();   // build hardware inputs once (static DOM)
+applyHardwareConfig();   // derive everything and render
 </script>
 </body>
 </html>
